@@ -1,3 +1,5 @@
+
+
 let load = (data) => {
     let zonaHoraria = data["timezone"]
     let zonaHorariaHTML = document.getElementById("zonaHoraria")
@@ -7,16 +9,12 @@ let load = (data) => {
     let temperaturaHTML = document.getElementById("temperatura")
     temperaturaHTML.textContent = temperature;
 
+    // let uvIndice = data['daily']['uv_index_max'][0]
+    // let uvIndiceHTML = document.getElementById("uvIndex")
+    // uvIndiceHTML.textContent = uvIndice;
+
 
     plot(data);
-
-
-    // let prueba3 = data["time"]
-    // let pruebaHTML3 = document.getElementById("prueba3")
-    // pruebaHTML3.textContent = prueba3;
-
-
-    // console.log(data);
 
 }
 
@@ -44,6 +42,41 @@ let plot = (data) => {
 }
 
 
+let loadInocar = () => {
+
+    let URL_proxy = 'https://cors-anywhere.herokuapp.com/' // Coloque el URL de acuerdo con la opción de proxy
+    let URL = URL_proxy + 'https://www.inocar.mil.ec/mareas/consultan.php';
+
+
+    // let URL = 'https://www.inocar.mil.ec/mareas/consultan.php';
+
+    fetch(URL)
+        .then(response => response.text())
+        .then(data => {
+
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(data, "text/html");
+            // console.log(xml);
+
+            let contenedorMareas = xml.getElementsByClassName('container-fluid')[0];
+            let contenedorHTML = document.getElementById('table-container');
+            contenedorHTML.innerHTML = contenedorMareas.innerHTML;
+
+
+
+
+
+
+        })
+        .catch(console.error);
+
+
+}
+
+
+
+
+
 
 
 (
@@ -51,7 +84,7 @@ let plot = (data) => {
         let meteo = localStorage.getItem('meteo');
 
         if (meteo == null) {
-            let URL = 'https://api.open-meteo.com/v1/forecast?latitude=-2.14&longitude=-79.95&hourly=temperature_2m&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto';
+            let URL = 'https://api.open-meteo.com/v1/forecast?latitude=-2.13&longitude=-79.90&hourly=temperature_2m&daily=weathercode,sunset,uv_index_max&timezone=auto';
             fetch(URL)
                 .then(response => response.json())
                 .then(data => {
@@ -69,6 +102,11 @@ let plot = (data) => {
             load(JSON.parse(meteo));
 
         }
+
+        // loadInocar();
+
+
+
 
     }
 )();
