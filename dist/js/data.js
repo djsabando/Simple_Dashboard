@@ -133,25 +133,25 @@ let loadInocar = () => {
     function () {
         let meteo = localStorage.getItem('meteo');
 
-        // if (meteo == null) {
-        let URL = 'https://api.open-meteo.com/v1/forecast?latitude=-2.13&longitude=-79.90&hourly=temperature_2m&daily=weathercode,sunset,uv_index_max&timezone=auto';
-        fetch(URL)
-            .then(response => response.json())
-            .then(data => {
-                load(data);
-                /* GUARDAR DATA EN LA MEMORIA */
-                localStorage.setItem("meteo", JSON.stringify(data));
+        if (meteo == null) {
+            let URL = 'https://api.open-meteo.com/v1/forecast?latitude=-2.13&longitude=-79.90&hourly=temperature_2m&daily=weathercode,sunset,uv_index_max&timezone=auto';
+            fetch(URL)
+                .then(response => response.json())
+                .then(data => {
+                    load(data);
+                    /* GUARDAR DATA EN LA MEMORIA */
+                    localStorage.setItem("meteo", JSON.stringify(data));
 
 
-            })
-            .catch(console.error);
+                })
+                .catch(console.error);
 
-        // } else {
+        } else {
 
-        //     /* CARGAR DATA DESDE LA MEMORIA */
-        //     load(JSON.parse(meteo));
+            /* CARGAR DATA DESDE LA MEMORIA */
+            load(JSON.parse(meteo));
 
-        // }
+        }
 
         loadInocar();
 
